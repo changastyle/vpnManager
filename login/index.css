@@ -1,0 +1,27 @@
+#contenedorLogin
+{
+	position:absolute;
+	left:40%;
+	right:40%;
+	top:40%;
+	bottom:40%;
+	width:20%;
+	height:20%;
+	background-color:#D9BD00;
+	border-radius:5px;
+}
+#butEntrar
+{
+	position:absolute;
+	bottom:15px;
+}
+.inputs
+{
+	width:96%;
+	padding:8px;
+	margin-top:15px;
+	position:relative;
+	left:2%;
+	right:2%;
+	
+}

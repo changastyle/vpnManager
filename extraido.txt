@@ -1,0 +1,32 @@
+//FILA AGREGAR NVO:
+echo "<tr>";
+echo "<td>";
+echo "</td>";
+
+
+	echo "<td class='tdAlta'>";
+		echo "<input class='inputAlta' type='text' value='adsl_0'>";
+	echo "</td>";
+	
+	echo "<td class='tdAlta'>";
+		echo "<input class='inputAlta' type='text' value='User-Password'>";
+	echo "</td>";
+	
+	echo "<td class='tdAlta'>";
+		echo "<input class='inputAlta' type='text' value='=='>";
+	echo "</td>";
+	
+	echo "<td class='tdAlta'>";
+		echo "<input class='inputAlta' type='text' value='1nTr4l0t'>";
+	echo "</td>";
+	
+	echo "<td class='tdAlta'>";
+		echo "<input class='inputAlta' type='text' value='0'>";
+	echo "</td>";
+	
+	echo "<td class='tdAlta'>";
+		echo "<input id='inputObservaciones' class='inputAlta' type='text' data-text='Donde ??' value='Donde ??' onfocus='foc(this)' onblur='blu(this)'>";
+	echo "</td>";
+	echo "</tr>";
+
+echo "</tr>";

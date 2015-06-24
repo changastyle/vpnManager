@@ -1,0 +1,43 @@
+<html>
+	<head>
+    	<link rel="Stylesheet" href="index.css">
+        <script src="jquery-2.1.4.min.js"></script>
+        <script>
+		function foc(quien)
+		{
+			console.log( $("#"+quien.id).val() );
+			console.log("Trim = " + $("#"+quien.id).val().trim() + " | data = " +  $("#"+quien.id).data("text"));
+			if(	$("#"+quien.id).val().trim() ==  $("#"+quien.id).data("text")	)
+			{
+				
+				$("#"+quien.id).val("");
+			}
+		}
+		
+		function blu(quien)
+		{
+			//console.log( $("#"+quien.id).val() );
+			if(	$("#"+quien.id).val().trim() == ""	)
+			{
+				$("#"+quien.id).val(	$("#"+quien.id).data("text")	)
+			}
+		}
+		function chequearUsuarioExistente()
+		{
+			
+		}
+		function login()
+		{
+			if (verificarUsuario() && verificarPassword() )
+			{
+				login();	
+			}
+		}
+		</script>
+    </head>
+    <div id="contenedorLogin">
+    	<input class="inputs" id="txtUsuario" type="text" value="Usuario" data-text="Usuario" onFocus="foc(this)" onBlur="blu(this)" onKeyPress="chequearUsuarioExistente()">
+        <input class="inputs" id="txtPassword" type="Password" value="Password" data-text="Password" onFocus="foc(this)" onBlur="blu(this)">
+        <button id="butEntrar" class="inputs" onclick="login()">Entrar</button>
+    </div>
+</html>

@@ -1,0 +1,1069 @@
+--
+-- PostgreSQL database dump
+--
+
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = off;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET escape_string_warning = off;
+
+--
+-- Name: plpgsql; Type: PROCEDURAL LANGUAGE; Schema: -; Owner: postgres
+--
+
+CREATE PROCEDURAL LANGUAGE plpgsql;
+
+
+ALTER PROCEDURAL LANGUAGE plpgsql OWNER TO postgres;
+
+SET search_path = public, pg_catalog;
+
+--
+-- Name: date_sub(date, integer, text); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION date_sub(date, integer, text) RETURNS date
+    LANGUAGE plpgsql
+    AS $_$
+DECLARE
+        var1 date;
+        var2 text;
+BEGIN
+        var2 = $2 || ' ' || $3;
+        SELECT INTO var1
+                to_date($1 - var2::interval, 'YYYY-MM-DD');
+RETURN var1;
+END;$_$;
+
+
+ALTER FUNCTION public.date_sub(date, integer, text) OWNER TO postgres;
+
+--
+-- Name: hibernate_sequence; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE hibernate_sequence
+    START WITH 907656
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.hibernate_sequence OWNER TO postgres;
+
+--
+-- Name: hibernate_sequence; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('hibernate_sequence', 285, true);
+
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: nas; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE nas (
+    id integer NOT NULL,
+    nasname character varying(128) NOT NULL,
+    shortname character varying(32) NOT NULL,
+    type character varying(30) DEFAULT 'other'::character varying NOT NULL,
+    ports integer,
+    secret character varying(60) NOT NULL,
+    community character varying(50),
+    description character varying(200)
+);
+
+
+ALTER TABLE public.nas OWNER TO postgres;
+
+--
+-- Name: nas_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE nas_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.nas_id_seq OWNER TO postgres;
+
+--
+-- Name: nas_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE nas_id_seq OWNED BY nas.id;
+
+
+--
+-- Name: nas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('nas_id_seq', 1, false);
+
+
+--
+-- Name: radacct_radacctid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE radacct_radacctid_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.radacct_radacctid_seq OWNER TO postgres;
+
+--
+-- Name: radacct_radacctid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('radacct_radacctid_seq', 550270, true);
+
+
+--
+-- Name: radcheck; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE radcheck (
+    id integer DEFAULT nextval('hibernate_sequence'::regclass) NOT NULL,
+    username character varying(64) DEFAULT ''::character varying NOT NULL,
+    attribute character varying(64) DEFAULT ''::character varying NOT NULL,
+    op character varying(2) DEFAULT '=='::character varying NOT NULL,
+    value character varying(253) DEFAULT ''::character varying NOT NULL,
+    reint integer DEFAULT 0 NOT NULL,
+    observaciones character varying(200)
+);
+
+
+ALTER TABLE public.radcheck OWNER TO postgres;
+
+--
+-- Name: radcheck_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE radcheck_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.radcheck_id_seq OWNER TO postgres;
+
+--
+-- Name: radcheck_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE radcheck_id_seq OWNED BY radcheck.id;
+
+
+--
+-- Name: radcheck_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('radcheck_id_seq', 143, true);
+
+
+--
+-- Name: radgroupcheck; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE radgroupcheck (
+    id integer NOT NULL,
+    groupname character varying(64) DEFAULT ''::character varying NOT NULL,
+    attribute character varying(64) DEFAULT ''::character varying NOT NULL,
+    op character varying(2) DEFAULT '=='::character varying NOT NULL,
+    value character varying(253) DEFAULT ''::character varying NOT NULL
+);
+
+
+ALTER TABLE public.radgroupcheck OWNER TO postgres;
+
+--
+-- Name: radgroupcheck_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE radgroupcheck_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.radgroupcheck_id_seq OWNER TO postgres;
+
+--
+-- Name: radgroupcheck_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE radgroupcheck_id_seq OWNED BY radgroupcheck.id;
+
+
+--
+-- Name: radgroupcheck_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('radgroupcheck_id_seq', 1, false);
+
+
+--
+-- Name: radgroupreply; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE radgroupreply (
+    id integer NOT NULL,
+    groupname character varying(64) DEFAULT ''::character varying NOT NULL,
+    attribute character varying(64) DEFAULT ''::character varying NOT NULL,
+    op character varying(2) DEFAULT '='::character varying NOT NULL,
+    value character varying(253) DEFAULT ''::character varying NOT NULL
+);
+
+
+ALTER TABLE public.radgroupreply OWNER TO postgres;
+
+--
+-- Name: radgroupreply_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE radgroupreply_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.radgroupreply_id_seq OWNER TO postgres;
+
+--
+-- Name: radgroupreply_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE radgroupreply_id_seq OWNED BY radgroupreply.id;
+
+
+--
+-- Name: radgroupreply_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('radgroupreply_id_seq', 1, false);
+
+
+--
+-- Name: radippool; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE radippool (
+    id bigint NOT NULL,
+    pool_name text NOT NULL,
+    framedipaddress inet,
+    nasipaddress text NOT NULL,
+    calledstationid character varying(64),
+    callingstationid text DEFAULT ''::text NOT NULL,
+    expiry_time timestamp(0) without time zone NOT NULL,
+    username text DEFAULT ''::text,
+    pool_key character varying(30) NOT NULL
+);
+
+
+ALTER TABLE public.radippool OWNER TO postgres;
+
+--
+-- Name: radippool_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE radippool_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.radippool_id_seq OWNER TO postgres;
+
+--
+-- Name: radippool_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE radippool_id_seq OWNED BY radippool.id;
+
+
+--
+-- Name: radippool_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('radippool_id_seq', 1, false);
+
+
+--
+-- Name: radpostauth; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE radpostauth (
+    id bigint NOT NULL,
+    username character varying(253) NOT NULL,
+    pass character varying(128),
+    reply character varying(32),
+    authdate timestamp with time zone DEFAULT '2011-03-10 09:49:55.656536-03'::timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.radpostauth OWNER TO postgres;
+
+--
+-- Name: radpostauth_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE radpostauth_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.radpostauth_id_seq OWNER TO postgres;
+
+--
+-- Name: radpostauth_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE radpostauth_id_seq OWNED BY radpostauth.id;
+
+
+--
+-- Name: radpostauth_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('radpostauth_id_seq', 1, false);
+
+
+--
+-- Name: radreply; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE radreply (
+    id integer DEFAULT nextval('hibernate_sequence'::regclass) NOT NULL,
+    username character varying(64) DEFAULT ''::character varying NOT NULL,
+    attribute character varying(64) DEFAULT ''::character varying NOT NULL,
+    op character varying(2) DEFAULT '='::character varying NOT NULL,
+    value character varying(253) DEFAULT ''::character varying NOT NULL
+);
+
+
+ALTER TABLE public.radreply OWNER TO postgres;
+
+--
+-- Name: radreply_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE radreply_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.radreply_id_seq OWNER TO postgres;
+
+--
+-- Name: radreply_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE radreply_id_seq OWNED BY radreply.id;
+
+
+--
+-- Name: radreply_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('radreply_id_seq', 93, true);
+
+
+--
+-- Name: usergroup; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE usergroup (
+    username character varying(64) DEFAULT ''::character varying NOT NULL,
+    groupname character varying(64) DEFAULT ''::character varying NOT NULL,
+    priority integer DEFAULT 0 NOT NULL
+);
+
+
+ALTER TABLE public.usergroup OWNER TO postgres;
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY nas ALTER COLUMN id SET DEFAULT nextval('nas_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY radgroupcheck ALTER COLUMN id SET DEFAULT nextval('radgroupcheck_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY radgroupreply ALTER COLUMN id SET DEFAULT nextval('radgroupreply_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY radippool ALTER COLUMN id SET DEFAULT nextval('radippool_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY radpostauth ALTER COLUMN id SET DEFAULT nextval('radpostauth_id_seq'::regclass);
+
+
+--
+-- Data for Name: nas; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY nas (id, nasname, shortname, type, ports, secret, community, description) FROM stdin;
+\.
+
+
+--
+-- Data for Name: radcheck; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY radcheck (id, username, attribute, op, value, reint, observaciones) FROM stdin;
+1	admjucat	User-password	==	ernesto	0	\N
+3	aluna	User-password	==	demian0394	0	\N
+4	asosa	User-password	==	ariel1973	0	\N
+5	caraya	User-password	==	cambiame	0	\N
+6	clopez	User-password	==	ioTei6up	0	\N
+7	ctorreblanca	User-password	==	Yohsh8uz	0	\N
+8	deljujuy	User-password	==	sansalvador	0	\N
+9	dmartin	User-password	==	15603081	0	\N
+10	dmolinaro	User-password	==	redondos	0	\N
+11	dneuman	User-password	==	1404natu	0	\N
+13	egaray	User-password	==	gexteban	0	\N
+15	esalas	User-password	==	io6Ivae7	0	\N
+17	fabian	User-password	==	oiTho2qu	0	\N
+18	fabrica	User-password	==	supersecreto	0	\N
+19	fisidro	User-password	==	ahBie0ai	0	\N
+87	monitoreo	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+23	guribe	User-password	==	emieyu4M	0	\N
+25	hectorcor	User-password	==	EY6pae0b	0	\N
+26	hmartinz	User-password	==	kiSaeW0f	0	\N
+27	hmoreno	User-password	==	cambiame	0	\N
+29	jdiazar	User-password	==	logus1957	0	\N
+30	jlamperti	User-password	==	catu8324	0	\N
+31	jmdiaz	User-password	==	Xiew6ahL	0	\N
+32	jorgecor	User-password	==	Caing5ph	0	\N
+33	lguadagno	User-password	==	aJi3fpoK	0	\N
+36	monobingo	User-password	==	lacaja	0	\N
+37	mvargas	User-password	==	chulengo	0	\N
+38	mviola	User-password	==	aiCh5ez6	0	\N
+40	pablocor	User-password	==	23121980	0	\N
+42	psilveira	User-password	==	iDae5ohn	0	\N
+43	ramirolp	User-password	==	admin123	0	\N
+44	raraya	User-password	==	cambiame	0	\N
+46	rjijena	User-password	==	cambiame	0	\N
+48	ssarmiento	User-password	==	Nico7roc	0	\N
+50	victorcor	User-password	==	aiW2thae	0	\N
+51	walberto	User-password	==	OGiok3Wa	0	\N
+53	admjucat	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+54	adrianc	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+55	aluna	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+56	asosa	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+57	caraya	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+58	clopez	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+59	ctorreblanca	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+61	dmartin	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+62	dmolinaro	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+63	dneuman	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+64	ealderete	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+65	egaray	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+66	erossi	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+67	esalas	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+68	ewolf	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+69	fabian	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+70	fabrica	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+71	fisidro	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+72	gbecker	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+187	cazcarate	User-Password	==	cambiame	0	\N
+75	guribe	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+77	hectorcor	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+78	hmartinz	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+79	hmoreno	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+80	horaciolp	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+81	jdiazar	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+82	jlamperti	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+83	jmdiaz	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+84	jorgecor	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+85	lguadagno	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+86	marinor	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+89	mvargas	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+90	mviola	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+92	pablocor	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+93	paco	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+94	psilveira	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+95	ramirolp	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+97	rbellora	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+98	rjijena	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+52	wpenia	User-password	==	tin69cha	0	\N
+14	erossi	User-password	==	cambiame	0	\N
+35	monitoreo	User-password	==	supersecreto	0	\N
+20	gbecker	User-password	==	quilmes26	0	\N
+41	paco	User-password	==	pancutan	0	\N
+156	cnahuelquin	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+12	ealderete	User-password	==	tecnoctc	0	\N
+47	santiago	User-password	==	tamtecas	0	\N
+28	horaciolp	User-password	==	horazito	2	\N
+155	cnahuelquin	User-password	==	con12765855	0	\N
+157	adsl_022	User-password	==	1nTr4l0t	0	NQN - Neuquen - Base Instituto
+76	gwiefling	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+88	monobingo	NAS-IP-Address	=~	192.168.59.84	0	\N
+49	victor	User-password	==	BI01vi33*	0	\N
+2	adrianc	User-password	==	nexus2000	0	\N
+34	marinor	User-password	==	1moncholo	0	\N
+16	ewolf	User-password	==	** no va mas **	0	\N
+96	raraya	NAS-IP-Address	=~	192.168.59.84	0	\N
+60	deljujuy	NAS-IP-Address	=~	192.168.59.84	0	\N
+159	spascual	User-password	==	cambiame	0	\N
+99	santiago	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+100	ssarmiento	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+101	victor	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+102	victorcor	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+103	walberto	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+104	wpenia	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+152	fgutierrez	User-password	==	FER2013$%	0	\N
+185	ondiss	User-Password	==	tunelagrecia	0	ONDISS tercerizados hernan para acceso a grecia
+111	adsl_007	User-password	==	1nTr4l0t	0	RN - Rio Colorado
+160	spascual	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+112	adsl_008	User-password	==	1nTr4l0t	0	RN - BRC - Elordi
+113	adsl_009	User-password	==	1nTr4l0t	0	RN - SAO - Agencia 66
+116	adsl_012	User-password	==	1nTr4l0t	0	RN - Allen
+45	rbellora	User-password	==	doritkos	0	\N
+119	pvasquez	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+186	ondiss	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+129	agrinstin	User-password	==	**no va mas**	10	\N
+130	agrinstin	NAS-IP-Address	=~	999999	0	\N
+117	adsl_013	User-password	==	1nTr4l0t	0	RN - Cinco Saltos - Agencia 28
+167	jpmarchese	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+166	jpmarchese	User-password	==	tecno2011	0	\N
+131	msabate	User-password	==	chachi73*	0	\N
+120	adsl_014	User-password	==	1nTr4l0t	0	RN - BRC - Moreno
+137	adsl_017	User-password	==	1nTr4l0t	0	LP - General Pico - Agencia 39
+145	adsl_018	User-password	==	1nTr4l0t	0	NQN - Neuquen - Base Oeste
+121	benavente	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+105	adsl_001	User-password	==	1nTr4l0t	0	RN - BRC - La Taba
+106	adsl_002	User-password	==	1nTr4l0t	0	RN - BRC - Onelli
+107	adsl_003	User-password	==	1nTr4l0t	0	RN - BRC - 9 de Julio
+114	adsl_010	User-password	==	1nTr4l0t	0	\N
+115	adsl_011	User-password	==	1nTr4l0t	0	\N
+170	ndeiros	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+109	adsl_005	User-password	==	1nTr4l0t	0	RN - Choele Choel
+110	adsl_006	User-password	==	1nTr4l0t	0	LP - General Pico - Agencia 112
+126	likay	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+150	adsl_019	User-password	==	1nTr4l0t	0	SC - Rio Gallegos - Servicios Publicos
+158	adsl_023	User-password	==	1nTr4l0t	0	RN - BRC - Bustillo
+161	adsl_024	User-password	==	1nTr4l0t	0	NQN - Neuquen - Base Este
+162	adsl_025	User-password	==	1nTr4l0t	0	NQN - Neuquen - DPIN
+168	adsl_029	User-password	==	1nTr4l0t	0	TDF - Rio Grande - Tanque de Agua
+169	ndeiros	User-password	==	cambiame	0	\N
+164	adsl_027	User-password	==	1nTr4l0t	0	TDF - Ushuaia - Dany
+128	mmolineri	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+165	adsl_028	User-password	==	1nTr4l0t	0	RN - SAO - Agencia 50 Sub 9 (Utiliza el ADSL de la Agencia 66)
+108	adsl_004	User-password	==	1nTr4l0t	0	RN - Cinco Saltos - Torre G3 (Utiliza el ADSL de la Agencia 28)
+154	adsl_021	User-password	==	1nTr4l0t	0	LP - General Pico - Pico 2 (Utiliza el ADSL de la Agencia 39)
+151	adsl_020	User-password	==	1nTr4l0t	0	TDF - Rio Grande - Torre TV
+124	mcalvo	User-password	==	** no va mas ***	0	\N
+132	msabate	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+125	likay	User-password	==	pollo1962	0	\N
+188	cazcarate	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+133	adsl_015	User-password	==	1nTr4l0t	0	\N
+138	dsuasnabar	User-password	==	Danielito2015	0	\N
+171	dumania	User-password	==	Cancelado2015	0	\N
+136	adsl_016	User-password	==	1nTr4l0t	0	\N
+118	pvasquez	User-password	==	Nortena34	0	\N
+139	dsuasnabar	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+123	mcalvo	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+147	sstrien	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+134	sstrien	User-password	==	24362436	0	\N
+146	sstrien	User-password	==	24362436	0	\N
+173	rcanavoso	User-password	==	Constellation321	0	Raquel C. Salta
+172	dumania	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+175	adsl_030	User-Password	==	1nTr4l0t	0	RN-Oeste-II
+174	rcanavoso	NAS-IP-Address	=~	192.168.59.84	0	\N
+141	fbaudino	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+143	lcrudo	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+142	lcrudo	User-password	==	tecno2012accion	0	\N
+127	mmolineri	User-password	==	finalcut	0	\N
+140	fbaudino	User-password	==	dfgdgsdgsgsdgf	0	\N
+177	pmanuelli	NAS-IP-Address	=~	192.168.59.84	0	\N
+144	adsl_254	User-password	==	1nTr4l0t	0	\N
+178	farmesto	User-Password	==	LunaLunera	0	Federico Armesto
+179	farmesto	NAS-IP-Address	=~	192.168.59.84	0	\N
+122	benavente	User-password	==	tecno2000	0	\N
+180	imango	User-Password	==	aWDesrt56pqwe	0	Ignacio Mango
+181	imango	NAS-IP-Address	=~	192.168.59.84	0	\N
+176	pmanuelli	User-password	==	Pablo1379+vpn	0	Pablo manuelli
+148	hkuntz	User-password	==	996633hk	0	\N
+182	adsl_031	User-Password	==	1nTr4l0t	0	USH-Torre TV
+163	adsl_026	User-password	==	1nTr4l0t	0	BRC - Ag. 32-11
+183	fgarufi	User-Password	==	cambiame	0	Federico Garufi
+184	fgarufi	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+149	hkuntz	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+153	fgutierrez	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+192	cocampos	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+189	rmolina	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+190	rmolina	User-Password	==	cambiame	0	Roberto Molina
+191	cocampos	User-Password	==	cambiame	0	Claudio Ocampos
+24	gwiefling	User-password	==	riverdance	0	\N
+193	adsl_032	User-Password	==	1nTr4l0t	0	Snap Idevi
+194	adsl_033	User-Password	==	1nTr4l0t	0	Snap Mutisias
+197	adsl_036	User-Password	==	1nTr4l0t	0	Flex 32
+198	adsl_037	User-Password	==	1nTr4l0t	0	Flex 67
+199	adsl_038	User-Password	==	1nTr4l0t	0	Flex 75
+200	adsl_039	User-Password	==	1nTr4l0t	0	Snap Pioneros 4400
+201	adsl_040	User-Password	==	1nTr4l0t	0	Snap Gutierrez
+202	adsl_041	User-Password	==	1nTr4l0t	0	Bingo RG
+203	adsl_042	User-Password	==	1nTr4l0t	0	VDM Ricky
+204	adsl_043	User-Password	==	1nTr4l0t	0	BRC-Ag.30[23]
+205	adsl_044	User-Password	==	1nTr4l0t	0	BRC-Ag- 67-10
+206	adsl_045	User-Password	==	1nTr4l0t	0	BRC-Ag32-38
+207	samarilla	User-password	==	cambiame	0	\N
+208	samarilla	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	\N
+210	adsl_046	User-Password	==	1nTr4l0t	0	SLA-Ag-44-5
+196	adsl_035	User-Password	==	1nTr4l0t	0	Flex 32-26
+195	adsl_034	User-Password	==	1nTr4l0t	0	Flex 32-4
+211	adsl_047	User-Password	==	1nTr4l0t	0	BRC - Campichuelo
+212	adsl_048	User-Password	==	1nTr4l0t	0	USH-Ag. 38
+213	adsl_049	User-Password	==	1nTr4l0t	0	USH-Ag. 30
+214	adsl_050	User-Password	==	1nTr4l0t	0	SLA-Ag. 10-2
+215	adsl_051	User-Password	==	1nTr4l0t	0	De donde?
+216	adsl_052	User-Password	==	1nTr4l0t	0	De donde?
+219	adsl_255	User-Password	==	1nTr4l0t	0	Observaciones
+220	adsl_256	User-Password	==	1nTr4l0t	0	Observaciones
+221	adsl_257	User-Password	==	1nTr4l0t	0	Observaciones
+222	adsl_258	User-Password	==	1nTr4l0t	0	Prueba
+223	prueba	prueba	==	prueba	0	prueba
+224	adsl_259	User-Password	==	1nTr4l0t	0	Observaciones
+225	adsl_259	User-Password	==	1nTr4l0t	0	Observaciones
+226	adsl_259	User-Password	==	1nTr4l0t	0	Observaciones
+227	adsl_260	User-Password	==	1nTr4l0t	0	Observaciones
+228	adsl_261	User-Password	==	1nTr4l0t	0	Observaciones
+229	adsl_262	User-Password	==	1nTr4l0t	0	Observaciones
+230	adsl_263	User-Password	==	1nTr4l0t	0	Observaciones
+234	adsl_264	User-Password	==	1nTr4l0t	0	Observaciones
+239	adsl_265	User-Password	==	1nTr4l0t	0	Observaciones
+241	adsl_266	User-Password	==	1nTr4l0t	0	Observaciones
+243	adsl_266	User-Password	==	1nTr4l0t	0	Observaciones
+244	adsl_267	User-Password	==	1nTr4l0t	0	Observaciones
+246	adsl_267	User-Password	==	1nTr4l0t	0	Observaciones
+247	adsl_268	User-Password	==	1nTr4l0t	0	Observaciones
+249	adsl_268	User-Password	==	1nTr4l0t	0	Observaciones
+250	adsl_269	User-Password	==	1nTr4l0t	0	Observaciones
+252	adsl_269	User-Password	==	1nTr4l0t	0	Observaciones
+253	adsl_270	User-Password	==	1nTr4l0t	0	Observaciones
+255	adsl_270	User-Password	==	1nTr4l0t	0	Observaciones
+256	adsl_271	User-Password	==	1nTr4l0t	0	Observaciones
+258	adsl_271	User-Password	==	1nTr4l0t	0	Observaciones
+259	adsl_272	User-Password	==	1nTr4l0t	0	Observaciones
+262	Nicolas	User-Password	==	1nTr4l0t	0	lalala
+265	Nicolas	User-Password	==	1nTr4l0t	0	lallaa
+268	NIcolas	User-Password	==	1nTr4l0t	0	asadasd
+271	Nicolas	User-Password	==	1nTr4l0t	0	asdas
+274	Nicolas	User-Password	==	123456	0	
+276	Juaaan	User-Password	==	123089123809	0	
+278	PruebaFinal	User-Password	==	uweropuiop	0	
+283	fff	User-Password	==	asdfasdf	0	
+284	fff	NAS-IP-Address	=~	(10.10.20.5|192.168.59.84)	0	
+\.
+
+
+--
+-- Data for Name: radgroupcheck; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY radgroupcheck (id, groupname, attribute, op, value) FROM stdin;
+\.
+
+
+--
+-- Data for Name: radgroupreply; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY radgroupreply (id, groupname, attribute, op, value) FROM stdin;
+\.
+
+
+--
+-- Data for Name: radippool; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY radippool (id, pool_name, framedipaddress, nasipaddress, calledstationid, callingstationid, expiry_time, username, pool_key) FROM stdin;
+\.
+
+
+--
+-- Data for Name: radpostauth; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY radpostauth (id, username, pass, reply, authdate) FROM stdin;
+\.
+
+
+--
+-- Data for Name: radreply; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY radreply (id, username, attribute, op, value) FROM stdin;
+1	admjucat	Service-Type	=	Framed-User
+2	adrianc	Service-Type	=	Framed-User
+3	aluna	Service-Type	=	Framed-User
+4	asosa	Service-Type	=	Framed-User
+5	caraya	Service-Type	=	Framed-User
+6	clopez	Service-Type	=	Framed-User
+7	ctorreblanca	Service-Type	=	Framed-User
+8	deljujuy	Service-Type	=	Framed-User
+9	dmartin	Service-Type	=	Framed-User
+10	dmolinaro	Service-Type	=	Framed-User
+11	dneuman	Service-Type	=	Framed-User
+12	ealderete	Service-Type	=	Framed-User
+13	egaray	Service-Type	=	Framed-User
+14	erossi	Service-Type	=	Framed-User
+15	esalas	Service-Type	=	Framed-User
+16	ewolf	Service-Type	=	Framed-User
+17	fabian	Service-Type	=	Framed-User
+18	fabrica	Service-Type	=	Framed-User
+19	fisidro	Service-Type	=	Framed-User
+20	gbecker	Service-Type	=	Framed-User
+22	grizzo	Service-Type	=	Framed-User
+23	guribe	Service-Type	=	Framed-User
+24	gwiefling	Service-Type	=	Framed-User
+25	hectorcor	Service-Type	=	Framed-User
+26	hmartinz	Service-Type	=	Framed-User
+27	hmoreno	Service-Type	=	Framed-User
+28	horaciolp	Service-Type	=	Framed-User
+29	jdiazar	Service-Type	=	Framed-User
+30	jlamperti	Service-Type	=	Framed-User
+31	jmdiaz	Service-Type	=	Framed-User
+32	jorgecor	Service-Type	=	Framed-User
+33	lguadagno	Service-Type	=	Framed-User
+34	marinor	Service-Type	=	Framed-User
+35	monitoreo	Service-Type	=	Framed-User
+36	monobingo	Service-Type	=	Framed-User
+37	mvargas	Service-Type	=	Framed-User
+38	mviola	Service-Type	=	Framed-User
+39	nbunse	Service-Type	=	Framed-User
+40	pablocor	Service-Type	=	Framed-User
+41	paco	Service-Type	=	Framed-User
+42	psilveira	Service-Type	=	Framed-User
+43	ramirolp	Service-Type	=	Framed-User
+44	raraya	Service-Type	=	Framed-User
+45	rbellora	Service-Type	=	Framed-User
+46	rjijena	Service-Type	=	Framed-User
+47	santiago	Service-Type	=	Framed-User
+48	ssarmiento	Service-Type	=	Framed-User
+49	victor	Service-Type	=	Framed-User
+50	victorcor	Service-Type	=	Framed-User
+51	walberto	Service-Type	=	Framed-User
+52	wpenia	Service-Type	=	Framed-User
+53	adsl_001	Framed-IP-Address	=	172.36.200.1
+54	adsl_002	Framed-IP-Address	=	172.36.200.2
+55	adsl_003	Framed-IP-Address	=	172.36.200.3
+56	adsl_004	Framed-IP-Address	=	172.36.200.4
+57	adsl_005	Framed-IP-Address	=	172.36.200.5
+58	adsl_006	Framed-IP-Address	=	172.36.200.6
+59	adsl_007	Framed-IP-Address	=	172.36.200.7
+60	adsl_008	Framed-IP-Address	=	172.36.200.8
+61	adsl_009	Framed-IP-Address	=	172.36.200.9
+62	adsl_010	Framed-IP-Address	=	172.36.200.10
+63	adsl_011	Framed-IP-Address	=	172.36.200.11
+64	adsl_012	Framed-IP-Address	=	172.36.200.12
+65	adsl_013	Framed-IP-Address	=	172.36.200.13
+66	adsl_001	Framed-IP-Netmask	=	255.255.255.0
+67	adsl_002	Framed-IP-Netmask	=	255.255.255.0
+68	adsl_003	Framed-IP-Netmask	=	255.255.255.0
+69	adsl_004	Framed-IP-Netmask	=	255.255.255.0
+70	adsl_005	Framed-IP-Netmask	=	255.255.255.0
+71	adsl_006	Framed-IP-Netmask	=	255.255.255.0
+72	adsl_007	Framed-IP-Netmask	=	255.255.255.0
+73	adsl_008	Framed-IP-Netmask	=	255.255.255.0
+74	adsl_009	Framed-IP-Netmask	=	255.255.255.0
+75	adsl_010	Framed-IP-Netmask	=	255.255.255.0
+76	adsl_011	Framed-IP-Netmask	=	255.255.255.0
+77	adsl_012	Framed-IP-Netmask	=	255.255.255.0
+78	adsl_013	Framed-IP-Netmask	=	255.255.255.0
+79	pvasquez	Service-Type	=	Framed-User
+80	adsl_014	Framed-IP-Address	=	172.36.200.14
+81	adsl_014	Framed-IP-Netmask	=	255.255.255.0
+101	sstrien	Service-Type	=	Framed-User
+82	benavente	Service-Type	=	Framed-User
+102	hkuntz	Service-Type	=	Framed-User
+103	adsl_019	Framed-IP-Address	=	172.36.200.19
+96	lcrudo	Service-Type	=	Framed-User
+104	adsl_019	Framed-IP-Netmask	=	255.255.255.0
+105	adsl_020	Framed-IP-Address	=	172.36.200.20
+84	likay	Service-Type	=	Framed-User
+85	mmolineri	Service-Type	=	Framed-User
+86	agrinstin	Service-Type	=	Framed-User
+106	adsl_020	Framed-IP-Netmask	=	255.255.255.0
+87	msabate	Service-Type	=	Framed-User
+88	adsl_015	Framed-IP-Address	=	172.36.200.15
+89	adsl_015	Framed-IP-Netmask	=	255.255.255.0
+107	fgutierrez	Service-Type	=	Framed-User
+90	demian	Service-Type	=	Framed-User
+91	adsl_016	Framed-IP-Address	=	172.36.200.16
+92	adsl_016	Framed-IP-Netmask	=	255.255.255.0
+94	adsl_017	Framed-IP-Netmask	=	255.255.255.0
+93	adsl_017	Framed-IP-Address	=	172.36.200.17
+83	mcalvo	Service-Type	=	Framed-User
+95	fbaudino	Service-Type	=	Framed-User
+98	adsl_254	Framed-IP-Netmask	=	255.255.255.0
+99	adsl_018	Framed-IP-Address	=	172.36.200.18
+100	adsl_018	Framed-IP-Netmask	=	255.255.255.0
+108	adsl_021	Framed-IP-Address	=	172.36.200.21
+109	adsl_021	Framed-IP-Netmask	=	255.255.255.0
+110	cnahuelquin	Service-Type	=	Framed-User
+111	adsl_022	Framed-IP-Address	=	172.36.200.22
+112	adsl_022	Framed-IP-Netmask	=	255.255.255.0
+113	adsl_023	Framed-IP-Address	=	172.36.200.23
+114	adsl_023	Framed-IP-Netmask	=	255.255.255.0
+115	spascual	Service-Type	=	Framed-User
+116	adsl_024	Framed-IP-Address	=	172.36.200.24
+117	adsl_024	Framed-IP-Netmask	=	255.255.255.0
+118	adsl_025	Framed-IP-Address	=	172.36.200.25
+119	adsl_025	Framed-IP-Netmask	=	255.255.255.0
+120	adsl_026	Framed-IP-Address	=	172.36.200.26
+121	adsl_026	Framed-IP-Netmask	=	255.255.255.0
+123	adsl_027	Framed-IP-Netmask	=	255.255.255.0
+124	adsl_028	Framed-IP-Address	=	172.36.200.28
+126	jpmarchese	Service-Type	=	Framed-User
+127	adsl_029	Framed-IP-Address	=	172.36.200.29
+125	adsl_028	Framed-IP-Netmask	=	255.255.255.0
+128	adsl_029	Framed-IP-Netmask	=	255.255.255.0
+129	ndeiros	Service-Type	=	Framed-User
+130	dumania	Service-Type	=	Framed-User
+172	adsl_047	Framed-IP-Netmask	=	255.255.255.0
+173	adsl_048	Framed-IP-Address	=	172.36.200.48
+132	adsl_030	Framed-IP-Netmask	=	255.255.255.0
+174	adsl_048	Framed-IP-Netmask	=	255.255.255.0
+134	adsl_031	Framed-IP-Netmask	=	255.255.255.0
+135	fgarufi	Service-Type	=	Framed-User
+136	ondiss	Service-Type	=	Framed-User
+122	adsl_027	Framed-IP-Address	=	172.36.200.27
+131	adsl_030	Framed-IP-Address	=	172.36.200.30
+133	adsl_031	Framed-IP-Address	=	172.36.200.31
+97	adsl_254	Framed-IP-Address	=	172.36.200.254
+137	cazcarate	Service-Type	=	Framed-User
+138	rmolina	Service-Type	=	Framed-User
+139	cocampos	Service-Type	=	Framed-User
+140	adsl_032	Framed-IP-Address	=	172.36.200.32
+141	adsl_032	Framed-IP-Netmask	=	255.255.255.0
+142	adsl_033	Framed-IP-Address	=	172.36.200.33
+143	adsl_033	Framed-IP-Netmask	=	255.255.255.0
+144	adsl_034	Framed-IP-Address	=	172.36.200.34
+145	adsl_034	Framed-IP-Netmask	=	255.255.255.0
+146	adsl_035	Framed-IP-Address	=	172.36.200.35
+147	adsl_035	Framed-IP-Netmask	=	255.255.255.0
+148	adsl_036	Framed-IP-Address	=	172.36.200.36
+149	adsl_036	Framed-IP-Netmask	=	255.255.255.0
+150	adsl_037	Framed-IP-Address	=	172.36.200.37
+151	adsl_037	Framed-IP-Netmask	=	255.255.255.0
+152	adsl_038	Framed-IP-Address	=	172.36.200.38
+153	adsl_038	Framed-IP-Netmask	=	255.255.255.0
+154	adsl_039	Framed-IP-Address	=	172.36.200.39
+155	adsl_039	Framed-IP-Netmask	=	255.255.255.0
+156	adsl_040	Framed-IP-Address	=	172.36.200.40
+157	adsl_040	Framed-IP-Netmask	=	255.255.255.0
+158	adsl_041	Framed-IP-Address	=	172.36.200.41
+159	adsl_041	Framed-IP-Netmask	=	255.255.255.0
+160	adsl_042	Framed-IP-Netmask	=	255.255.255.0
+161	adsl_042	Framed-IP-Address	=	172.36.200.42
+162	adsl_043	Framed-IP-Address	=	172.36.200.43
+163	adsl_043	Framed-IP-Netmask	=	255.255.255.0
+164	adsl_044	Framed-IP-Address	=	172.36.200.44
+165	adsl_044	Framed-IP-Netmask	=	255.255.255.0
+166	adsl_045	Framed-IP-Address	=	172.36.200.45
+167	adsl_045	Framed-IP-Netmask	=	255.255.255.0
+168	samarilla	Service-Type	=	Framed-User
+169	adsl_046	Framed-IP-Address	=	172.36.200.46
+170	adsl_046	Framed-IP-Netmask	=	255.255.255.0
+171	adsl_047	Framed-IP-Address	=	172.36.200.47
+175	adsl_049	Framed-IP-Address	=	172.36.200.49
+176	adsl_049	Framed-IP-Netmask	=	255.255.255.0
+177	adsl_050	Framed-IP-Address	=	172.36.200.50
+178	adsl_050	Framed-IP-Netmask	=	255.255.255.0
+179	adsl_051	Framed-IP-Address	=	172.36.200.51
+180	adsl_051	Framed-IP-Netmask	=	255.255.255.0
+181	adsl_052	Framed-IP-Address	=	172.36.200.52
+182	adsl_052	Framed-IP-Netmask	=	255.255.255.0
+240	adsl_265	Framed-IP-Address	=	172.36.200.53
+242	adsl_266	Framed-IP-Address	=	172.36.200.54
+245	adsl_267	Framed-IP-Address	=	172.36.200.55
+248	adsl_268	Framed-IP-Address	=	172.36.200.56
+251	adsl_269	Framed-IP-Address	=	172.36.200.57
+254	adsl_270	Framed-IP-Address	=	172.36.200.58
+257	adsl_271	Framed-IP-Address	=	172.36.200.59
+260	adsl_272	Framed-IP-Address	=	172.36.200.60
+261	adsl_272	Framed-IP-Netmask	=	255.255.255.0
+263	Nicolas	Framed-IP-Address	=	
+264	Nicolas	Framed-IP-Netmask	=	255.255.255.0
+266	Nicolas	Framed-IP-Address	=	
+267	Nicolas	Framed-IP-Netmask	=	255.255.255.0
+269	NIcolas	Framed-IP-Address	=	
+270	NIcolas	Framed-IP-Netmask	=	255.255.255.0
+272	Nicolas	Framed-IP-Address	=	
+273	Nicolas	Framed-IP-Netmask	=	255.255.255.0
+275	Nicolas	Service-Type	=	Framed-User
+277	Juaaan	Service-Type	=	Framed-User
+279	PruebaFinal	Service-Type	=	Framed-User
+280	PruebaFinal	NAS-IP-Address	=~	(10.10.20.5.|192.168.59.84)
+285	fff	Service-Type	=	Framed-User
+\.
+
+
+--
+-- Data for Name: usergroup; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY usergroup (username, groupname, priority) FROM stdin;
+\.
+
+
+--
+-- Name: nas_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY nas
+    ADD CONSTRAINT nas_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: radcheck_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY radcheck
+    ADD CONSTRAINT radcheck_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: radgroupcheck_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY radgroupcheck
+    ADD CONSTRAINT radgroupcheck_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: radgroupreply_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY radgroupreply
+    ADD CONSTRAINT radgroupreply_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: radippool_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY radippool
+    ADD CONSTRAINT radippool_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: radpostauth_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY radpostauth
+    ADD CONSTRAINT radpostauth_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: radreply_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY radreply
+    ADD CONSTRAINT radreply_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: nas_nasname; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX nas_nasname ON nas USING btree (nasname);
+
+
+--
+-- Name: radcheck_username; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX radcheck_username ON radcheck USING btree (username, attribute);
+
+
+--
+-- Name: radgroupcheck_groupname; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX radgroupcheck_groupname ON radgroupcheck USING btree (groupname, attribute);
+
+
+--
+-- Name: radgroupreply_groupname; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX radgroupreply_groupname ON radgroupreply USING btree (groupname, attribute);
+
+
+--
+-- Name: radreply_username; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX radreply_username ON radreply USING btree (username, attribute);
+
+
+--
+-- Name: usergroup_username; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX usergroup_username ON usergroup USING btree (username);
+
+
+--
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+--
+-- PostgreSQL database dump complete
+--
+
